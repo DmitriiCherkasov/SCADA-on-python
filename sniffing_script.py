@@ -35,27 +35,20 @@ request_start_list_four = ['0103008c', '0203008c', '0303008c', '0403008c']
 response = ''
 request = ''
 
-## Dictionary for generator with its parameters
-generator_1_parameters = {'Generator number': None, 'Engine rpm': None, 'Engine Coolant Temperature': None, 'Generator Total Percent Current': None,
-                          'Engine Oil Temperature': None, 'Engine Oil Pressure': None, 'Exhaust Left Temperature': None,
-                          'Exhaust Right Temperature': None, 'Fuel Pressure': None, 'Oil Filter Diff': None,
-                          'Fuel Filter Diff': None, 'Fuel Consumption': None}
-generator_2_parameters = {'Generator number': None, 'Engine rpm': None, 'Engine Coolant Temperature': None, 'Generator Total Percent Current': None,
-                          'Engine Oil Temperature': None, 'Engine Oil Pressure': None, 'Exhaust Left Temperature': None,
-                          'Exhaust Right Temperature': None, 'Fuel Pressure': None, 'Oil Filter Diff': None,
-                          'Fuel Filter Diff': None, 'Fuel Consumption': None}
-generator_3_parameters = {'Generator number': None, 'Engine rpm': None, 'Engine Coolant Temperature': None, 'Generator Total Percent Current': None,
-                          'Engine Oil Temperature': None, 'Engine Oil Pressure': None, 'Exhaust Left Temperature': None,
-                          'Exhaust Right Temperature': None, 'Fuel Pressure': None, 'Oil Filter Diff': None,
-                          'Fuel Filter Diff': None, 'Fuel Consumption': None}
-generator_4_parameters = {'Generator number': None, 'Engine rpm': None, 'Engine Coolant Temperature': None, 'Generator Total Percent Current': None,
+
+
+# May be it will be useful to make the code clear
+
+dic_fill = {'Generator number': None, 'Engine rpm': None, 'Engine Coolant Temperature': None, 'Generator Total Percent Current': None,
                           'Engine Oil Temperature': None, 'Engine Oil Pressure': None, 'Exhaust Left Temperature': None,
                           'Exhaust Right Temperature': None, 'Fuel Pressure': None, 'Oil Filter Diff': None,
                           'Fuel Filter Diff': None, 'Fuel Consumption': None}
 
-## Dictionary for each generator
-generator_parameters_dict = [generator_1_parameters, generator_2_parameters,
-                             generator_3_parameters, generator_4_parameters]
+generator_parameters_dict = {'generator_1_parameters': dic_fill, 'generator_2_parameters': dic_fill,
+                             'generator_3_parameters':dic_fill, 'generator_4_parameters':dic_fill}
+
+# Attention! Now the 'generator_parameters_dict' is  a list, not a dict
+
 
 
 def parsing_response_for_generator(generator_dictionary):
