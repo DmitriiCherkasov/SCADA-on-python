@@ -1,6 +1,32 @@
 from tkinter import *
-from sniffing_script import *
+import sqlite3 as database
 
+
+result = []
+
+
+
+def get_last_values_from_database(generator_table):
+    global result
+    with database.connect("scada.db") as connection:
+        query = """SELECT
+        Time,
+        Generator_number,
+        Generator_Total_Percent_Current,
+        Engine_Oil_Temperature,
+        Engine_Coolant_Temperature,
+        Engine_rpm,
+        Engine_operating_hours,
+        Exhaust_Left_Temperature,
+        Exhaust_Right_Temperature,
+        Fuel_Pressure,
+        Oil_Filter_Diff,
+        Fuel_Filter_Diff,
+        Fuel_Consumption
+        FROM {table} ORDER BY rowid DESC LIMIT 1"""
+        cur = connection.cursor()
+        cur.execute(query.format(table=generator_table))
+        result = cur.fetchall()
         
 class Generator:
        
@@ -31,19 +57,18 @@ class Generator:
         self.load = Label(root, text='None', height=2, font="Calibri 12", bg='yellow')
         self.load.grid(row=row + 11, column=column)
         
-    def label_refresh(self, generator_dict):
-        self.engine_speed['text'] = generator_dict['Engine rpm']
-        self.fuel_pressure['text'] = generator_dict['Fuel Pressure']
-        self.fuel_diff['text'] = generator_dict['Fuel Filter Diff']
-        self.oil_pressure['text'] = generator_dict['Fuel Pressure']
-        self.oil_diff['text'] = generator_dict['Oil Filter Diff']
-        self.oil_temp['text'] = generator_dict['Engine Oil Temperature']
-        self.coolant_temp['text'] = generator_dict['Engine Coolant Temperature']
-        self.right_exhaust['text'] = generator_dict['Exhaust Right Temperature']
-        self.left_exhaust['text'] = generator_dict['Exhaust Left Temperature']
-        self.fuel_consumption['text'] = generator_dict['Fuel Consumption']
-        self.load['text'] = generator_dict['Generator Total Percent Current']
-        
+    def label_refresh(self):
+        self.engine_speed['text'] = result[0][5]
+        self.fuel_pressure['text'] = result[0][9]
+        self.fuel_diff['text'] = result[0][11]
+        self.oil_pressure['text'] = 0
+        self.oil_diff['text'] = result[0][10]
+        self.oil_temp['text'] = result[0][3]
+        self.coolant_temp['text'] = result[0][4]
+        self.right_exhaust['text'] = result[0][8]
+        self.left_exhaust['text'] = result[0][7]
+        self.fuel_consumption['text'] = result[0][12]
+        self.load['text'] = 0
         
 root = Tk()
 root.title('ДЭС "Крабозаводское"')
@@ -58,12 +83,11 @@ fourth_generator = Generator(root, 'ДГУ №4', 0, 4)
 
 
 def refresh_parameters():
-    sniffing_parameters()
-    first_generator.label_refresh(generator_1_parameters)
-    second_generator.label_refresh(generator_2_parameters)
-    third_generator.label_refresh(generator_3_parameters)
-    fourth_generator.label_refresh(generator_4_parameters)
-    root.after(3, refresh_parameters)
+    get_last_values_from_database('generator_1')
+    first_generator.label_refresh()
+    get_last_values_from_database('generator_2')
+    second_generator.label_refresh()
+    root.after(1, refresh_parameters)
 
 label_1 = Label(root, text='Скорость вращения, об/мин', height=2, font="Calibri 12", bg='yellow')
 label_1.grid(row=1, column=0)
